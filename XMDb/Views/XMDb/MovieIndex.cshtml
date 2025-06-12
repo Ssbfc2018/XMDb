@@ -1,0 +1,86 @@
+﻿@model IEnumerable<XMDb.Models.Movie>
+
+<h1>@ViewBag.title Movies</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Director)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ReleaseDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Budget)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Runtime)
+            </th>
+            <th>
+                Genres
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <a asp-controller="Item" asp-action="MovieDetails"
+                       asp-route-id=@item.Id>
+                        @item.Title
+                    </a>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Director)
+                </td>
+                <td>
+                    @item.ReleaseDate.ToString("yyyy-MM-dd")
+                </td>
+                <td>
+                    @string.Format("{0:N0}", item.Budget)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Runtime)
+                </td>
+                <td class="genreCol">
+                    @foreach (var mg in item.MovieGenres)
+                    {
+                        List<Genre> Genres = ViewBag.Genres;
+                        var name = Genres.FirstOrDefault(g => g.Id == mg.GenreId).Name;
+                        <a class="genreTag" asp-controller="XMDb" asp-action="MovieIndex"
+                           asp-route-title=@name>
+                            @name
+                        </a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<nav class="Page navigation" style="display:flex;justify-content:space-between">
+    <ul class="pagination">
+        <li>
+            Page <input type="text" value="@ViewBag.PageIndex" style="width:50px;" /> of @ViewBag.PageSize
+        </li>
+    </ul>
+    <ul class="pagination">
+        @if (@ViewBag.PageIndex > 1)
+        {
+            <li><a asp-action="MovieIndex" asp-route-title="recent" asp-route-currentPageIndex="1">First</a>|</li>
+            <li><a asp-action="MovieIndex" asp-route-title="recent" asp-route-currentPageIndex="@ViewBag.Prev">Prev</a>|</li>
+        }
+
+
+        @if (@ViewBag.PageIndex != @ViewBag.PageSize)
+        {
+            <li><a asp-action="MovieIndex" asp-route-title="recent" asp-route-currentPageIndex="@ViewBag.Next">Next</a>|</li>
+            <li><a asp-action="MovieIndex" asp-route-title="recent" asp-route-currentPageIndex="@ViewBag.PageSize">Last</a></li>
+        }
+    </ul>
+</nav>

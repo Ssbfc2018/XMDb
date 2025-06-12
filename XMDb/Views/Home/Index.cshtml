@@ -1,0 +1,20 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="title">
+	<h1 class="display-4">Welcome To XMDb</h1>
+</div>
+
+<ul>
+	<li>
+		<a class="indexTitle" asp-controller="XMDb" asp-action="MovieIndex"
+		   asp-route-title="recent" asp-route-currentPageIndex="1">Movies</a>
+	</li>
+	<li>
+		<a class="indexTitle" asp-controller="XMDb" asp-action="GenreIndex">Genres</a>
+	</li>
+	<li>
+		<a class="indexTitle" asp-controller="XMDb" asp-action="ActorIndex">Actors</a>
+	</li>
+</ul>

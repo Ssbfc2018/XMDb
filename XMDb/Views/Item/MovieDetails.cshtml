@@ -1,0 +1,112 @@
+﻿@model XMDb.Models.Movie
+
+@{
+    ViewData["Title"] = "Movie Details";
+}
+
+<h1>@Html.DisplayFor(model => model.Title)</h1>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Title)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Title)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Director)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Director)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ReleaseDate)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ReleaseDate)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Budget)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Budget)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Runtime)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Runtime)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.AverageRating)
+        </dt>
+        <dd class = "col-sm-10">
+            @ViewBag.rating
+            <button onclick="RatingTheMovie('@ViewBag.ratingORchanging', '@Model.Id', '@ViewBag.Username')">@ViewBag.ratingORchanging</button>
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
+
+
+<!--method for pop-up rating notification to act like a form-->
+<!--easy to understand but not simple and efficient, will modify in the future-->
+<script>
+    function RatingTheMovie(condition, movieId, username) {
+        // Login Status(only login users can rate the movie)
+        if(username==""){
+            alert("You are not logged in. \n Please log in to rate. ");
+            return;
+        }
+
+        // Rating Status(check if users rated or not, new rating if not, update rating if alrealy rated)
+        const message=condition=="Rating the Movie"
+            ? "Please Enter Rating(1-10): "
+            : "Please Enter New Rating(1-10): ";
+
+        // Cancel Rating(users click cancel)
+        const input=prompt(message);
+        if (input === null) return;
+        
+        // Turn input into form and transfer to corresponding controller function by [HttpPost] method
+        const ratingValue = parseInt(input);
+        if (Number.isInteger(ratingValue) && ratingValue>=1 && ratingValue<=10 ){
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '/Item/RatingMovie';
+
+            // Add Anti-Forgery Token
+            const token = document.querySelector('input[name="__RequestVerificationToken"]').value;
+            const tokenInput = document.createElement('input');
+            tokenInput.type = 'hidden';
+            tokenInput.name = '__RequestVerificationToken';
+            tokenInput.value = token;
+            form.appendChild(tokenInput);
+
+            // Add Movie Id
+            const movieIdInput = document.createElement('input');
+            movieIdInput.type = 'hidden';
+            movieIdInput.name = 'movieId';
+            movieIdInput.value = movieId;
+            form.appendChild(movieIdInput);
+
+            // Add Rating Value
+            const ratingInput = document.createElement('input');
+            ratingInput.type = 'hidden';
+            ratingInput.name = 'ratingValue';
+            ratingInput.value = ratingValue;
+            form.appendChild(ratingInput);
+
+            // Submit Form
+            document.body.appendChild(form);
+            form.submit();
+        }else{
+            alert("Invalid Rating");
+        }
+    }
+</script>

@@ -1,0 +1,45 @@
+﻿@model IEnumerable<XMDb.Models.Actor>
+
+@{
+    ViewData["Title"] = "Actor Page";
+}
+
+<h1>Actors</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.FullName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.City)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Birthday)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.FullName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.City)
+                </td>
+                <td>
+                    @item.Birthday.ToString("yyyy-MM-dd")
+                </td>
+
+                <td>
+                    <a asp-controller="XMDb" asp-action="MovieIndex" asp-route-title="@item.FullName">Movies</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

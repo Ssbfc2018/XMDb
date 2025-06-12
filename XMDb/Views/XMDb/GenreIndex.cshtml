@@ -1,0 +1,13 @@
+﻿<h1>Genres</h1>
+
+<form method="post" asp-controller="XMDb" asp-action="GenreIndex">
+
+	<select name="GenreId" asp-items="@ViewBag.Genres">
+		<option value"">Select A Genre</option>
+	</select>
+
+	<button type="submit">
+		Submit
+	</button>
+
+</form>
