@@ -17,3 +17,7 @@ MVC, ASP.NET, EntityFramework Core, Identity, Authentication
 -Likes/Kudos for Movies, Actors and Genres  
 -Description in Movie Model  
 -Change Sorting  
+
+Account
+Username: admin@admin.com
+Password: Admin123@
